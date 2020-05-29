@@ -256,7 +256,7 @@ fabric.properties
 
 # End of https://www.gitignore.io/api/flask,python,pycharm
 
-config/
+
 venv/
-instance/
+
 >>>>>>> dev
