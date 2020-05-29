@@ -1,0 +1,25 @@
+
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block content %}
+<style>
+    .center {
+    margin: 0 auto;
+    width: 80%;
+}
+</style>
+
+
+
+<div class="row">
+
+    <div class="center">
+        <h1>Add a task</h1>
+        {{ wtf.quick_form(post_form) }}
+    </div>
+</div>
+
+
+
+
+{% endblock content%}
