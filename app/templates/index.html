@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block content %}
+<style>
+    .center {
+    margin: 0 auto;
+    width: 80%;
+}
+
+
+
+</style>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
+{%if table_data %}
+<style>
+    .center {
+    margin: 0 auto;
+    width: 80%;
+}
+</style>
+
+
+
+
+    <div class="center">
+
+        <br>
+        <h1>My Todolist</h1>
+
+
+
+<table id="test-table" class="table display" cellspacing="0" width="100%" >
+    <thead>
+    <tr>
+        {% for c in columns %}
+        <th scope="col">{{c}}</th>
+        {% endfor %}
+        <th scope="col">Delete</th>
+    </tr>
+    </thead>
+    <tbody>
+
+    {% for data in table_data %}
+
+    <tr>
+        {% for k, v in data.items() %}
+
+        <td>{{v}}</td>
+        {% endfor %}
+        <td> <button type="button" class="btn btn-labeled btn-danger">
+                <span class="btn-label"><i class="glyphicon glyphicon-trash"></i></span></button></td>
+    </tr>
+
+    {% endfor %}
+    </tbody>
+</table>
+   </div>
+{%endif%}
+
+{% if task %}
+{%include '_post_task.html' %}
+{%endif%}
+
+{% endblock content%}
+

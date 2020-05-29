@@ -1,0 +1,19 @@
+<table id="test-table" class="table display" cellspacing="0" width="100%">
+    <thead>
+        <tr>
+            {% for c in columns %}
+                <th scope="col">{{c}}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for k, v in table_data.items() %}
+            <tr>
+                <td>{{v.col1}}v</td>
+                <td>{{v.col2}}v</td>
+                ...
+                <td>{{v.colN}}v</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
