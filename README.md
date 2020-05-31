@@ -23,7 +23,7 @@ up to run on Heroku.
 
 
 ```sh
-python app.py --debug True
+python app.py --debug True --config dev
 ```
 
 ### Gunicorn
