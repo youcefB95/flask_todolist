@@ -1,35 +1,64 @@
 from flask import flash, jsonify, request, render_template, redirect, url_for, Blueprint
+from flask_paginate import Pagination, get_page_parameter, get_page_args
 
 from . import db
 from . import models
-from .forms import TaskForm, DeleteTaskForm
+from .forms import AddTaskForm, DeleteTaskForm
 from .tables import Task
 
-blueprint = Blueprint('app', __name__, url_prefix='/')
+blueprint = Blueprint('app', __name__, url_prefix='/', template_folder='templates',
+                     static_folder='static')
+
+
 
 
 @blueprint.route('/', methods=['GET', 'POST'])
 @blueprint.route('/index', methods=['GET', 'POST'])
 def index():
-    form = DeleteTaskForm()
+
+    addTaskform, deleteTaskform = AddTaskForm(), DeleteTaskForm()
     count_tasks = models.countTasks()
-    result = models.getTasks()
-    data = result
     columns = ['id', 'content', 'category']
-    table_d = data
-    if form.validate_on_submit():
-        _delete_task = models.deleteTask(form.id.data)
+    page, per_page = int(request.args.get('page', 1)), 3
+    offset = (page - 1) * per_page
+    tasks = models.getPaginationTasks(offset,per_page)
+    pagination = Pagination(page=page,
+                            per_page = per_page,
+                            total=count_tasks,
+                            search=False,
+                            record_name='tasks',
+                           css_framework='bootstrap3')
+
+    if deleteTaskform.validate_on_submit():
+        models.deleteTask(deleteTaskform.id.data)
         return redirect(url_for('app.index'))
-    if count_tasks==0:
-        return redirect(url_for('app.createtask'))
+
+    if addTaskform.validate_on_submit():
+        content, category = addTaskform.content.data, addTaskform.category.data
+        models.createTask(content, category)
+        return redirect(url_for('app.index'))
+
+
 
     return render_template('index.html', columns=columns,
-                           table_data=table_d, delete_form=form)
+                           data=tasks,
+                           pagination=pagination, delete_form=deleteTaskform,add_form=addTaskform,css_framework='bootstrap3',post_form=None)
+
+
+
+def delete_task(task):
+    _delete_task = models.deleteTask(task)
+
+def create_task(content, category):
+    _create_task = models.createTask(content, category)
+    flash('Your post is now live!')
+
+
 
 
 @blueprint.route('/create_task', methods=['GET', 'POST'])
 def createtask():
-    form = TaskForm()
+    form = AddTaskForm()
     if form.validate_on_submit():
         content, category = form.content.data, form.category.data
         _post_task = models.createTask(content, category)

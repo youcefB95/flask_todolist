@@ -12,6 +12,12 @@ global tasks
 tasks = []
 
 
+def getPaginationTasks(offset,per_page):
+    tasks = Task.query.limit(per_page)
+    tasks = tasks[offset: offset + per_page]
+    return tasks
+
+
 def getTasks():
     del tasks[:]
     rows = db.session.query(Task).all()

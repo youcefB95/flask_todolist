@@ -4,15 +4,15 @@ from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Le
 from app.tables import Task
 
 
-class TaskForm(FlaskForm):
+class AddTaskForm(FlaskForm):
     content = StringField('content', validators=[DataRequired()])
     category = StringField('category', validators=[DataRequired()])
-    submit = SubmitField('Create new task')
+    submit = SubmitField('Create')
 
 
 class DeleteTaskForm(FlaskForm):
     id = StringField(validators=[DataRequired()])
-    submit = SubmitField('delete this task')
+    submit = SubmitField('Delete')
 
 
 class EmptyForm(FlaskForm):

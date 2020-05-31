@@ -2,46 +2,64 @@
 {% import 'bootstrap/wtf.html' as wtf %}
 
 {% block content %}
-<style>
-    .center {
-    margin: 0 auto;
-    width: 80%;
-}
-
-
-
-
-
-
-
-
-</style>
-
+<link type="text/css" href="{{ url_for('.static', filename='css/index.css') }}" rel="stylesheet">
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-
 <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
-{%if table_data %}
 <style>
-    .center {
+      .center {
     margin: 0 auto;
     width: 80%;
 }
+ .pagination-page-info {
+    padding: .6em;
+    padding-left: 0;
+    width: 40em;
+    margin: .5em;
+    margin-left: 0;
+    font-size: 12px;
+}
+.pagination-page-info b {
+    color: black;
+    background: #6aa6ed;
+    padding-left: 2px;
+    padding: .1em .25em;
+    font-size: 150%;
+}
 
 
-
-
-
+.form-inline .form-group {
+    margin: 5px; /* Add something like this */
+}
 </style>
+
+
+{%if data %}
 
 
 <div class="center">
 
-    <br>
+
     <h1>My Todolist</h1>
 
 
-    <table id="test-table" class="table display" cellspacing="0" width="100%">
-        <thead>
+
+ <hr>
+    <form class="form form-inline" method="post" role="form">
+        <div class="row">
+
+            {{ add_form.hidden_tag() }}
+            {{ wtf.form_errors(add_form, hiddens="only") }}
+            {{ wtf.form_field(add_form.content,placeholder='task activity ..') }}
+            {{ wtf.form_field(add_form.category,placeholder='1, 2, 3, ...') }}
+            {{ wtf.form_field(add_form.submit,button_map={'submit':'info'}) }}
+        </div>
+
+    </form>
+    <hr>
+
+    <table id="test-table" class="table table-hover" cellspacing="0" width="100%">
+     <thead class="thead-light">
+
         <tr>
             {% for c in columns %}
             <th scope="col">{{c}}</th>
@@ -51,19 +69,19 @@
         </thead>
         <tbody>
 
-        {% for data in table_data %}
+        {% for tasks in data %}
 
         <tr>
 
-            {% for k, v in data.items() %}
 
-            <td>{{v}}</td>
-            {% endfor %}
+            <td>{{tasks.id}}</td>
+            <td>{{tasks.content}}</td>
+            <td>{{tasks.category}}</td>
             <td>
                 <form class="form form-horizontal" method="post" role="form">
 
                     {{ delete_form.hidden_tag() }}
-                    {{ wtf.form_field(delete_form.id,value=data['id'] ,type="hidden") }}
+                    {{ wtf.form_field(delete_form.id,value=tasks['id'] ,type="hidden") }}
                     {{ wtf.form_field(delete_form.submit,button_map={'submit':'danger'}) }}
                 </form>
             </td>
@@ -72,9 +90,13 @@
         {% endfor %}
         </tbody>
     </table>
+       {{ pagination.info }}
+    {{ pagination.links }}
+
+
 </div>
 {%endif%}
-{% if not table_data and not task %}
+{% if not data and not task %}
 {%include '_post_task.html' %}
 {%endif%}
 
@@ -82,6 +104,7 @@
 {% if task %}
 {%include '_post_task.html' %}
 {%endif%}
+
 
 {% endblock content%}
 
